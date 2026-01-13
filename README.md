@@ -1,5 +1,4 @@
-# INDICE
-- [INDICE](#indice)
+
 - [Expanding an industrial Honeypot with new Soft PLCs](#expanding-an-industrial-honeypot-with-new-soft-plcs)
   - [Introduzione](#introduzione)
   - [Descrizione del sistema industriale](#descrizione-del-sistema-industriale)
