@@ -27,14 +27,15 @@ count_water1 = 45
 count_water2 = 0
 count_water3 = 0
 
-# plc1.timeout = 500000
-# plc2.timeout = 500000
-# plc3.timeout = 500000
-# hmi.timeout = 500000
+plc1.timeout = 500000
+plc2.timeout = 500000
+plc3.timeout = 500000
+hmi.timeout = 500000
 
 def initialize_variable():
     while True:
         try:
+            time.sleep(1)
             print("Inizializzazione variabili...")    #inizializzazione livello dell'acqua
 
             # inizializzazione HMI
@@ -53,7 +54,6 @@ def initialize_variable():
             break
         except Exception as e:
             print(e)
-            time.sleep(0.5)
             pass
 
         except KeyboardInterrupt:

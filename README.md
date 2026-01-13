@@ -1,99 +1,121 @@
-# Simplified Secure Water Treatment (SSWaT) system testbed with a Python physical process simulator
+# INDICE
+- [INDICE](#indice)
+- [Expanding an industrial Honeypot with new Soft PLCs](#expanding-an-industrial-honeypot-with-new-soft-plcs)
+  - [Introduzione](#introduzione)
+  - [Descrizione del sistema industriale](#descrizione-del-sistema-industriale)
+- [Fasi di sviluppo](#fasi-di-sviluppo)
+  - [Analisi](#analisi)
+  - [Implementazione](#implementazione)
+  - [Difficolta incontrate](#difficolta-incontrate)
+- [Istruzioni per eseguire il progetto](#istruzioni-per-eseguire-il-progetto)
+  - [CODESYS (3 VM)](#codesys-3-vm)
+    - [1. Creazione PLC](#1-creazione-plc)
+    - [2. Modbus TCP](#2-modbus-tcp)
+    - [3. Login CODESYS e start](#3-login-codesys-e-start)
+    - [4. Hmi e schermata di login](#4-hmi-e-schermata-di-login)
+  - [OpenPLC (1 VM)](#openplc-1-vm)
+    - [1. Creazione PLC](#1-creazione-plc-1)
+    - [2. Run PLC](#2-run-plc)
 
-## Architettura del sistema
-Lo scopo del progetto è quello di simulare un sistema di trattamento dell'acqua con CODESYS, usando 3 PLC, una per ogni vasca, e Modbus TCP per la comunicazione tra le varie PLC. 
+
+# Expanding an industrial Honeypot with new Soft PLCs
+## Introduzione
+Nel mercato dell’automazione industriale sono presenti numerosi brand di PLC e, nella pratica, le aziende utilizzano spesso dispositivi differenti in base alle specifiche esigenze applicative. L’obiettivo di questo progetto è la realizzazione di un honeypot industriale che integri diversi tipi di soft PLC, al fine di simulare un ambiente eterogeneo e realistico. Partendo da un honeypot precedentemente sviluppato utilizzando PLC CODESYS, il progetto prevede la sostituzione del secondo PLC con un PLC di tipo OpenPLC, mantenendo invariata la logica di controllo rispetto alla versione originale.
+Questo approccio permette di riprodurre uno scenario più credibile, in cui coesistono PLC di brand differenti, migliorando il realismo e il valore del honeypot per attività di analisi e sicurezza. Infine, è prevista l’estrazione dell’HMI dal primo PLC (implementazione dell'honeypot di partenza), in modo che i diversi PLC comunichino direttamente con l’interfaccia operatore, eliminando la dipendenza dalla comunicazione tramite il primo PLC.
+
+## Descrizione del sistema industriale
+L’honeypot è un simulatore di un sistema di trattamento dell’acqua composto da tre vasche, ciascuna controllata da un PLC che gestisce l’attivazione di pompe e valvole, e da un HMI che consente di monitorare visivamente il funzionamento del sistema.
 ![phy_proc_sswat](img/simplified_SWAT_system.png)
 **Figure 1**: Simplified SWaT system physical process
 
-
-Ogni PLC viene eseguita su una macchina virtuale Ubuntu Server. Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP, mentre un altro processo pyhton si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua. L'HMI è stato implementato nel PLC1 per non avere una quarta VM che occupasse troppe risorse (si può tranquillamente fare se si hanno risorse adeguate). Sfruttando il processo fisico risuciamo a ricavare i valori delle variabili del PLC2 e PLC3 e rappresentarli nell'HMI.
+Ogni dispositivo viene eseguita su una macchina virtuale Ubuntu Server. Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP, mentre un altro processo pyhton si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua e aggiornamento dell'HMI con i dati raccolti.
 ![schema logico](img/SchemaLogico.png)
 **Figure 2**: Architettura del sistema
 
-Come si puó vedere nell´immagine (scansione della rete tramite Wireshark), la comunicazione avviene tramite modbus attraverso dei function code che indicano le scritture/letture dei vari registri del PLC.
-![wireshark](img/ModbusWireshark.png)
+# Fasi di sviluppo
+## Analisi
+In una fase preliminare è stata condotta un’analisi dettagliata del sistema nel suo complesso, con l’obiettivo di comprenderne l’architettura, i componenti costitutivi e il ruolo funzionale di ciascuno all’interno del processo industriale simulato. Particolare attenzione è stata rivolta allo studio della logica di controllo implementata nel PLC2, oggetto della successiva fase di migrazione.
 
+Tale analisi ha consentito di identificare i registri utilizzati per la comunicazione tramite protocollo Modbus TCP, nonché di comprenderne la mappatura e la corrispondenza con le variabili di processo. Questa fase si è rivelata fondamentale per acquisire una comprensione approfondita del funzionamento del sistema, delle modalità di scambio dei dati tra i PLC e dei meccanismi attraverso cui i valori venivano trasmessi, elaborati e sincronizzati.
 
-## INFORMAZIONI PER REPLICARE IL PROGETTO
-### Fase 1 - creazione PLC e run PLC 
-Usando il pacchetto control linux SL, è necessaria una VM linux per ogni PLC. Si è deciso di usare delle VM linux server 24.04 molto leggere e basiche. 
+## Implementazione
+Sulla base dei risultati emersi dalla fase preliminare di analisi, è stata effettuata la migrazione del PLC2 dall’ambiente CODESYS a OpenPLC. Nell’implementazione della nuova logica di controllo sono stati utilizzati due registri Modbus principali: uno dedicato alla gestione del livello dell’acqua e uno relativo alla richiesta di apertura della valvola.
 
-Per scaricare la VM con il pacchetto codesys già installato: https://drive.google.com/drive/folders/1c7P_QSMdfO-VPcBIuDba0UIoW_2kgzTC?usp=sharing -> cartella VM (per accedere alla VM utilizzare le seguenti credenziali -> *username: user*, *password: user*).
+Per la gestione del livello dell’acqua è stato mantenuto l’utilizzo di un holding register, consentendo al processo fisico simulato in Python di scrivere il valore del livello direttamente nel PLC. Per quanto riguarda il request di apertura della valvola, il registro è stato modificato da discrete input a coil, al fine di permettere la scrittura del valore da parte del PLC e la successiva lettura da parte del processo fisico, garantendo così una corretta bidirezionalità dello scambio di informazioni.  
 
-Per scaricare la VM standard e quindi aggiungere il pacchetto come da tutorial: https://ubuntu.com/download/server e quando si fa l'installazione, configurare correttamente l'ssh. 
-# 
-### NOTA (Solo in caso si scarichi la VM con codesys già installato): 
-Quando si scarica la VM bisogna resettare i file delle password dei device codesys, per farlo bisogna seguire i seguenti passaggi:
-  * Accendere la VM e collegarsi con ssh attraverso il comando: ssh nome_vm@ip_vm (in questo caso il nome della VM è *user*)
-  * Navigare fino alla cartella root (esegure due volte *cd ..*, in quanto la macchina appena avviata si trova in /home/user), successivamente lanciare i seguenti comandi:
-    
+Relativamente all’HMI, è stata riutilizzata la componente grafica precedentemente implementata, separandola dalla logica di controllo del PLC1. In modo analogo alla versione originale del sistema, sono stati configurati tre holding register per la visualizzazione dei livelli dell’acqua e tre coil per il controllo degli attuatori, in particolare pompa1, pompa3 e valvola.
+
+In seguito alla modifica dei registri Modbus, sono stati aggiornati il processo fisico e la logica di comunicazione tra PLC1 e PLC2, riorganizzando le funzioni EasyModbus in coerenza con la nuova struttura dei registri.
+
+## Difficolta incontrate
+
+La principale difficoltà riscontrata è legata alla diversa gestione dei registri Modbus tra PLC CODESYS e OpenPLC. In CODESYS la gestione dei registri è molto flessibile e consente di mappare liberamente le variabili PLC su qualsiasi area Modbus, senza vincoli rigidi sul tipo di registro o sui permessi di accesso. Questo permette, ad esempio, di scrivere anche su registri che nello standard Modbus TCP sono definiti come di sola lettura.  
+
+Al contrario, OpenPLC adotta una logica più rigorosa e aderente allo standard Modbus TCP, in cui il mapping delle variabili non è arbitrario: le variabili `%QW` sono associate esclusivamente agli Holding Register (4xxxx), le `%IW` agli Input Register (3xxxx, sola lettura), le `%QX` alle Coil (0xxxx, lettura/scrittura) e le `%IX` ai Discrete Input (1xxxx, sola lettura).
+
+Nel progetto, su PLC2 in CODESYS la variabile `request`, utilizzata per comandare l’apertura della valvola, era mappata su un registro di tipo Discrete Input. Questa configurazione è accettata da CODESYS, ma non è compatibile con OpenPLC, che non consente la scrittura su registri definiti come di ingresso. Di conseguenza, replicando la stessa mappatura in OpenPLC, la variabile `request` non veniva mai aggiornata, rimanendo sempre a `FALSE`, con l’effetto che la valvola non si apriva mai.
+
+Per risolvere il problema è stato necessario modificare la mappatura dei registri, assegnando la variabile `request` a una Coil (`%QX`), che consente sia la lettura sia la scrittura in conformità allo standard Modbus TCP, garantendo così il corretto funzionamento del sistema.
+
+# Istruzioni per eseguire il progetto
+Scaricare immagine iso [Ubuntu server 24.04](https://ubuntu.com/download/server) e creare 4 VM, tre PLC e una HMI. Una volta installato configurare correttamente l'ssh: 
 ```sh
-sudo rm /var/opt/codesys/.UserDatabase.csv
-sudo rm /var/opt/codesys/.UserDatabase.csv_
-sudo rm /var/opt/codesys/.GroupDatabase.csv
-sudo rm /var/opt/codesys/.GroupDatabase.csv_
+sudo apt install openssh-server
+sudo systemctl enable ssh
+sudo systemctl start ssh
+sudo systemctl status ssh
 ```
-  * Una volta lanciati questi comandi è possibile eseguire il device su codesys impostando la nuova password.
+Impostare la VM nella stessa rete locale del pc, quindi selezionare `scheda con bridge` nelle impostazioni di rete della VM.
 
-Per maggiori informazioni seguire il seguente link: https://edatec.cn/docs/an/an17-codesys-user-login-credentials-lost-user-guide/#_2-application-guide.
-#
+>#### Nota per VM codesys (_sconsigliato_):
+>Per scaricare direttamente la VM con il pacchetto codesys già installato: https://drive.google.com/drive/folders/1c7P_QSMdfO-VPcBIuDba0UIoW_2kgzTC?usp=sharing -> cartella VM (per accedere alla VM utilizzare le seguenti credenziali -> username: user, password: user).  
+>Quando si scarica la VM bisogna resettare i file delle password dei device codesys, per farlo bisogna seguire i seguenti passaggi:  
+>Accendere la VM e collegarsi con ssh attraverso il comando: ssh nome_vm@ip_vm (in questo caso il nome della VM è user)
+>Navigare fino alla cartella root (esegure due volte cd .., in quanto la macchina appena avviata si trova in /home/user), successivamente lanciare i seguenti comandi:
+>```sh
+>sudo rm /var/opt/codesys/.UserDatabase.csv
+>sudo rm /var/opt/codesys/.UserDatabase.csv_
+>sudo rm /var/opt/codesys/.GroupDatabase.csv
+>sudo rm /var/opt/codesys/.GroupDatabase.csv_
+>```
+>Una volta lanciati questi comandi è possibile eseguire il device su codesys impostando la nuova password.
+>Per maggiori informazioni seguire il seguente link: https://edatec.cn/docs/an/an17-codesys-user-login-credentials-lost-user-guide/#_2-application-guide.
+
+
+## CODESYS (3 VM)
+### 1. Creazione PLC
+Installando il pacchetto control linux SL sulle VM linux è possibile utilizzarle come plc CODESYS.
 
 Seguire questo tutorial https://www.youtube.com/watch?v=rj0dOhgnGjs e apportare le seguenti modifiche: 
 - al posto di Update Linux, premere su Tools, quindi su Deploy Control SL
 - scan con porta corretta (22, di ssh) e selezionare l'ip della VM (deve essere nella stessa rete del pc su cui gira codesys, quindi selezionare *scheda con bridge* nelle impostazioni di rete della VM)
 - click su deployment e selezionare codesys control linux SL, quindi installare il pacchetto sulla VM desiderata
+  
+![Deploy Control SL](img/DeployControlSL.png) 
+
+![Deploy ssh](img/sshDeploy.png)
+
+![Deploy install](img/installDeploy.png)
 
 A questo punto il pacchetto codesys control linux SL è installato sulla VM su cui girerà il PLC. 
-Per attivare le PLC, come prima cosa bisogna accendere la VM e collegarla alla rete privata del pc su cui gira CODESYS. Doppio click sul device, scan network e selezionare la VM corretta.
+Per attivare le PLC, come prima cosa bisogna accendere la VM e collegarla alla rete locale del pc su cui gira CODESYS. Doppio click sul device, scan network e selezionare la VM corretta.
 ![Scan network](img/ScanNet.png)
 
-
-### Fase 2 - modbus TCP
+### 2. Modbus TCP
 Per ogni Device, aggiungere un device ethernet che contiene a sua volta un modbus TCP server device. Quest'ultimo funzionerà come slave. Per la parte di modbus TCP master, ci si è affidati a un codice python. 
 
 Ogni dispositivo ethernet va settato correttamente: quindi doppio click sul dispositivo -> general -> browse network interface e selezionare l'interfaccia corrispondente alla VM. 
 ![Set Ethernet](img/SetEthernet.png)
 
-Ogni modbus TCP server device va settato correttamente: doppio click -> general e aggiungere le coils/discrete inputs desiderati; -> I/O mapping e collegare le variabili desiderate del PLC_PRG ai vari canali (fare doppio click nella colonna variable alla riga corrispondente). Inoltre ricordarsi di attivare la voce Enable1 sempre nella schermata del mapping dove c'è scritto "always uptade variables".
 
-
-#### Settare i Server ModbusTCP
-
-A questo punto bisogna mappare le variabile dei plc sui registri del server Modbus TCP in modo da poter leggere/scrivere le variabili dal processo fisico.
-Come mappare le variabili sui registri:
-
- * **Holding Registers**: valore a 16 bit, utilizzato per scrivere dal Client al Server (si può sia leggere che scrivere) --> funzione write_single_register(), read_holdingregisters().
- * **Input Registers**: valore a 16 bit, utilizzato per leggere dal Server al Client --> funzione read_inputregisters().
- * **Coils/Bobine**: valore booleano, utilizzato per scrivere dal Client al Server --> funzione write_single_coil().
- * **Discrete Inputs**: valore booleano, utilizzato per leggere dal Server al Client --> funzione read_discreteinput().
-
-Su codesys abbiamo quindi:
-
-* PLC1:
-  
-![server1](img/PLC1_Server.PNG)
-
-* PLC2:
-  
-![server2](img/PLC2_Server.PNG)
-
-* PLC3:
-  
-![server3](img/PLC3_Server.PNG)
-
-#### Struttura del progetto:
-![project_struct](img/Struttura_progetto.PNG)
-
-### Fase 3 - login CODESYS e start
+### 3. Login CODESYS e start
 Per eseguire lo start, tasto destro su Application e poi login. Verrà visualizzata una schemata dove verranno chieste le credenziali che sono state inserite nella fase 1. 
 Una volta inserite correttamente, la PLC sono in esecuzione. 
 ![Login](img/Login.png)
 
 
-### Fase 4 - hmi e schermata di login
-Per semplicità e per risparmiare dal punto di vista computazionale, la hmi è stata creata nel plc1. Da un punto di vista concettuale non cambia niente, però, creare un ulteriore plc con hmi ad hoc per la parte di visualizzazione. 
-
-Seguire questo tutorial https://www.youtube.com/watch?v=MpVdaDrxpDc&t=169s e al posto di creare un user management inserendo manualmente gli utenti fare i seguenti passi: 
+### 4. Hmi e schermata di login
+Seguire questo tutorial https://www.youtube.com/watch?v=MpVdaDrxpDc&t=169s e al posto di creare un user management inserendo manualmente gli utenti fare i seguenti passi (nel plc con HMI): 
 - doppio click su visualization manager -> user management -> create runtime based user management with default groups 
 - doppio click su device -> user and groups -> attivare la sincronizzazione premendo la "rotellina" verde in alto a sinistra
 - creare un gruppo Operator e aggiungere degli utenti a quel gruppo
@@ -103,74 +125,23 @@ Seguire questo tutorial https://www.youtube.com/watch?v=MpVdaDrxpDc&t=169s e al 
 
 Doppio click su webvisu e assicurarsi che la prima pagina visualizzata sia Menu (eventualmente ridimensionare la dimensione della visualizzazione).
 
-Runnare tutte le PLC e i codici python. A questo punto aprire il browser e digitare <*ip plc con hmi*>:8080/webvisu.htm
+Runnare tutte le PLC e i codici python. A questo punto aprire il browser e digitare `http://<ip plc con hmi>:8080/webvisu.htm` per visualizzare graficamente il funzionamento del sistema.
 
 ![HMI](img/HMI.png)
 **Figure 1**: HMI
 ![CONTROLPANEL](img/ControlPanelVisu.png)
 **Figure 2**: Control Panel
 
+## OpenPLC (1 VM)
+### 1. Creazione PLC
+Nella VM linux eseguire i seguenti comandi per installare il runtime di OpenPLC su linux:
+```sh
+git clone https://github.com/thiagoralves/OpenPLC_v3.git
+cd OpenPLC_v3
+./install.sh linux
+```
 
-## Funzionamento del sistema
-Visionare i video al seguente link nella cartella *Video*: https://drive.google.com/drive/folders/1JATZD6WBIS1a-mGmHA5qJ0BmNZkYnqBO?usp=sharing
-
-### Video *CODESYS SETUP*
-Il video illustra come effettuare il setup dei vari device per poter eseguire l'intero progetto. 
-
-### Video *HMI*
-Il video mostra come visualizzare l'hmi in esecuzione dopo aver fatto partire i vari script python (processo fisico e interazione tra plc). Viene eseguito l'accesso con l'utente Riccardo, amministratore, che in questo caso ha tutti i permessi e può quindi visualizzare l'hmi. 
-
-### Video *CONTROL PANEL*
-Il video dimostra come un utente senza permessi non possa visualizzare l'hmi e il pannello di controllo. In questo caso l'utente Alessia, operatore, non ha i permessi adeguati.  
-
-## Simulazione attacco
-Abbiamo provato a simulare un attacco al PLC2 con l'obiettivo di andare a riempire e far strabordare la vasca 2 nel processo fisico. 
-L'attacco è stato condotto attraverso un altro PC, diverso da quello in cui i PLC erano in esecuzione, collegato alla stessa rete Wi-Fi.
-
-L'attacco in sè prevede due importanti concetti:
-1. L'HMI visulizza la vasca piena ma non che straborda (limite della visualizzazione grafica).
-2. Il control panel invece mostra i valori alterati della vasca 2.
-
-### Attacco: Fase 1
-Nella prima fase si effettua una scansione della rete (con uno script Python) per verificare su quali indirizzi IP è aperta la porta 502 sulla quale avviene la comunicazione Modbus TCP.
-![Attacco: Fase 1 Python Scanning](img/scanning.png)
-
-### Attacco: Fase 2
-Una volta intercettati gli IP corretti si procede modificando i livelli delle vasche, abbiamo scelto la vasca 2, settando a TRUE la valvola che fa passare l'acqua dalla vasca 1 alla vasca 2 (quindi la valvola rimane sempre aperta).
-![Attacco: Fase 2 Python Attack](img/codesys_attack.png)
-
-### Attacco: Risultato
-Si può vedere che il livello della vasca è aumentato e nel control panel possiamo andare a visulizzare il valore effettivo. La vasca 2 ha una capacità massima di 30 litri, e con l'attacco il livello viene ampiamente superato (nell'immagine il valore è 57 litri).
-
-![Attacco: Risultato HMI](img/hmiTank2.png)
-
-![Attacco: Risultato ControlPanel](img/ControlP57.png)
-
-### Considerazioni sull'Attacco:
-1. L'attaccante deve avere accesso alla rete su cui viene eseguito Codesys.
-2. L'attaccante deve essere a conoscenza di quali sono le variabili/il processo fisico in questione (questo è possibile capirlo effettuando un'analisi del traffico nella rete).
-3. Nel nostro sistema non abbiamo dovuto bypassare firewall o crittografia in quando in ModbusTCP le informazioni viaggiano in chiaro.
-
-## Limitazioni / scelte progettuali
-### Macchine virtuali
-Si è scelto di usare tre VM, una per ogni plc, e sfruttare una di queste plc per l'interfaccia grafica. Chiaramente si sarebbe potuta mettere una quarta VM che si occupasse solo di ricevere i dati e popolare un'hmi, ma questo avrebbe richiesto più risorse. 
-
-### ModbusTCP
-Per quanto riguarda la parte di interazione con ModbusTCP, sono stati riscontrati alcuni problemi con l'utilizzo del Client (master) Modbus integrato in codesys: seguendo questo video https://www.youtube.com/watch?v=P9Wvl8wJTNQ non avevamo la voce *Enable 2* e questo faceva si che si riscontrasse l'errore *Bus Not Running* rendendo impossibile la comunicazione. A fronte di questo problema, abbiamo deciso di creare un master direttamente in python utilizzando la libreria *easyModbus* e aggiungere un ModbusTCP server device (slave) per ogni plc.
-![error](img/erroreEnabled.png)
-
-### Processo fisico
-Si è deciso di usare i litri (espressi in numero intero) come unità di misura dell'acqua e di mantenere un flusso costante dell'acqua. Il passaggio dell'acqua dalla valvola è sempre costante indipendentemente dalla quantità di acqua nella vasca e si articola nel seguente modo: 
-* Pump1: 4 litri al secondo
-* Valve: 2 litri al secondo (da tank1 a tank2)
-* Tube tank2-tank3: 1 litro al secondo
-* Clean water tube: 1 litro al secondo
-* Pump2: 1 litro al secondo (da tank3 a tank2)
-
-
-Livelli vasche: 
-* Tank1: 100 litri (min 40, max 80)
-* Tank2: 30 litri (min 10, max 20)
-* Tank3: 4 litri (min 0, max 3)
-
-
+### 2. Run PLC
+Una volta fatto, andare all'indirizzo `http://<indirizzo IP del VM>:8080` che porta all'interfaccia web del plc (fare login con le credenziali: username -> openplc, password -> openplc)
+al quale si dovrà inserire il programma corrispondente (_PLC2.st_) e runnare il plc.
+![Add program file](img/OpenPLCweb.png)

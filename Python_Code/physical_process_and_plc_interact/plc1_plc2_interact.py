@@ -10,8 +10,8 @@ plc1.connect()
 plc2 = easymodbus.modbusClient.ModbusClient(TARGET2, 502)
 plc2.connect()
 
-# plc1.timeout = 500000
-# plc2.timeout = 500000
+plc1.timeout = 500000
+plc2.timeout = 500000
 
 while True:
     try:
@@ -20,6 +20,7 @@ while True:
         lettura request da parte di plc2 (apertura o chiusura della valvola tra vasca1 e vasca2 basandosi sul livello di acqua di vasca2)
         e inoltro a plc1
         '''
+        time.sleep(1)
         
         req_valve_plc1 = plc2.read_coils(0, 1) # legge dal registro %QX0.0 usato dal plc openplc per scrivere la request
         if req_valve_plc1[0] is not None:      # la lettura potrebbe fallire
@@ -27,7 +28,6 @@ while True:
 
         print("Request:", req_valve_plc1)
 
-        time.sleep(1.5)
     except KeyboardInterrupt:
         print("Close connection")
         plc1.close()
