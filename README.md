@@ -197,7 +197,11 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc.
 1. Seguire questo [tutorial](https://infosys.beckhoff.com/english.php?content=../content/1033/cx9020_hw/2241767691.html&id=) per impostare il sistema target (la VM)
 2. Impostare i registri usati da Modbus TCP e attivare la licenza, seguire questo [video](https://www.youtube.com/watch?v=qlNG5wZElYI)
 3. Attivare la configurazione e runnare il PLC3
+   
   ![Attivazione Configurazione](img/ActiveConf.png)
+
   ![Restart in run mode](img/RestartRunMode.png)
+
   ![Login](img/LoginBeckhoff.png)
+
   ![Start](img/Start.png)
