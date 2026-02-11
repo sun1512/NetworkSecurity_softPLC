@@ -5,7 +5,7 @@
 - [Fasi di sviluppo](#fasi-di-sviluppo)
   - [Analisi](#analisi)
   - [Implementazione](#implementazione)
-  - [Difficolta incontrate](#difficolta-incontrate)
+  - [Difficoltà incontrate](#difficoltà-incontrate)
     - [Migrazione PLC2](#migrazione-plc2)
     - [Migrazione PLC3](#migrazione-plc3)
 - [Istruzioni per eseguire il progetto](#istruzioni-per-eseguire-il-progetto)
@@ -54,7 +54,7 @@ In seguito alla modifica dei registri Modbus, sono stati aggiornati il processo 
 
 Nella migrazione del PLC3 dall’ambiente CODESYS a BECKHOFF è stato mantenuto lo stesso schema dei registri utilizzato nell’implementazione precedente (Holding register per il livello dell'acqua e discrete input per il valore booleano della pompa), apportando le modifiche necessarie al programma PLC per adattarlo al nuovo ambiente di sviluppo TwinCAT. È stato inoltre adeguato il processo fisico al fine di allinearlo alla configurazione degli indirizzi dei registri prevista in TwinCAT.
 
-## Difficolta incontrate
+## Difficoltà incontrate
 
 ### Migrazione PLC2
 
@@ -197,8 +197,7 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc.
 1. Seguire questo [tutorial](https://infosys.beckhoff.com/english.php?content=../content/1033/cx9020_hw/2241767691.html&id=) per impostare il sistema target (la VM)
 2. Impostare i registri usati da Modbus TCP e attivare la licenza, seguire questo [video](https://www.youtube.com/watch?v=qlNG5wZElYI)
 3. Attivare la configurazione e runnare il PLC3
-
-    ![Attivazione Configurazione](img/ActiveConf.png)
-    ![Restart in run mode](img/RestartRunMode.png)
-    ![Login](img/LoginBeckhoff.png)
-    ![Start](img/Start.png)
+  ![Attivazione Configurazione](img/ActiveConf.png)
+  ![Restart in run mode](img/RestartRunMode.png)
+  ![Login](img/LoginBeckhoff.png)
+  ![Start](img/Start.png)
