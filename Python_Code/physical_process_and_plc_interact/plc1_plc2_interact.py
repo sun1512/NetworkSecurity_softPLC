@@ -1,8 +1,8 @@
 import time
 import easymodbus.modbusClient
 
-TARGET1 = "192.168.1.220"   # plc1 codesys
-TARGET2 = "192.168.1.16"    # plc2 openplc
+TARGET1 = "192.168.1.219"   # plc1 codesys
+TARGET2 = "192.168.1.15"    # plc2 openplc
 
 plc1 = easymodbus.modbusClient.ModbusClient(TARGET1, 502)
 plc1.connect()

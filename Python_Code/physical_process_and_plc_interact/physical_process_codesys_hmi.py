@@ -3,10 +3,11 @@ import time
 import easymodbus.modbusClient
 
 # Indirizzii IP PLC
-TARGET1 = "192.168.1.220"   # PLC1 codesys
-TARGET2 = "192.168.1.16"    # PLC2 openplc
-TARGET3 = "192.168.1.206"   # PLC3 codesys
-TARGET4 = "192.168.1.80"    # HMI in codesys
+TARGET1 = "192.168.1.219"   # PLC1 codesys
+TARGET2 = "192.168.1.15"    # PLC2 openplc
+TARGET3 = "192.168.1.240"   # PLC3 beckoff
+TARGET4 = "192.168.1.79"    # HMI in codesys
+
 
 # Connessione ai PLC
 plc1 = easymodbus.modbusClient.ModbusClient(TARGET1, 502)
@@ -49,7 +50,7 @@ def initialize_variable():
             # inizializzazione PLC
             plc1.write_single_register(0, count_water1) # livello acqua vasca 1
             plc2.write_single_register(0, count_water2) # livello acqua vasca 2 (registro holding %QW0 usato dal plc openplc)
-            plc3.write_single_register(0, count_water3) # livello acqua vasca 3
+            plc3.write_single_register(32768, count_water3) # livello acqua vasca 3
             plc1.write_single_coil(0, False) # Request plc 1 (la vasca 2 a start time non deve ricevere acqua dalla vasca 1, questo vale finchè non viene avviato il processo di interazione tra plc1 e plc2) 
             break
         except Exception as e:
@@ -75,18 +76,18 @@ while True:
 
         # Aggiornamento HMI
         info_plc1 = plc1.read_discreteinputs(0, 2)   # [pompa, valvola] dati dei registri del PLC1
-        pump_3 = plc3.read_discreteinputs(0, 1) # valore della pompa del PLC3
+        pump_3 = plc3.read_discreteinputs(32768, 1)  # valore della pompa del PLC3
         hmi.write_single_coil(0, info_plc1[0])
         hmi.write_single_coil(1, info_plc1[1])
         hmi.write_single_coil(2, pump_3[0])
 
-        print(f"Pompa: [{info_plc1[0]}], Valvola: [{info_plc1[1]}]")
+        print(f"Pompa1: [{info_plc1[0]}], Valvola: [{info_plc1[1]}], Pompa3: [{pump_3[0]}]")
 
         # Controllo pompa della terza vasca
         if pump_3[0]:
             count_water3 -= 1
-            plc3.write_single_register(0, count_water3)    # aggiornamento livello acqua su plc3
-            hmi.write_single_register(2, count_water3)     # scrittura su hmi per aggiornare l'interfaccia visuale
+            plc3.write_single_register(32768, count_water3)    # aggiornamento livello acqua su plc3
+            hmi.write_single_register(2, count_water3)         # scrittura su hmi per aggiornare l'interfaccia visuale
 
             count_water2 += 1
             plc2.write_single_register(0, count_water2)
@@ -100,7 +101,7 @@ while True:
             hmi.write_single_register(1, count_water2)
 
             count_water3 += 1
-            plc3.write_single_register(0, count_water3)
+            plc3.write_single_register(32768, count_water3)
             hmi.write_single_register(2, count_water3)
 
         # Pompa1 aperta e valvola verso la vasca 2 aperta (livello vasca1 aumenta, livello vasca2 aumenta)

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{e13b48cb-c3c0-48f4-8553-416c703237f6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+    level : WORD := 0;
+    pump : BOOL := FALSE;
+    low : BOOL;
+    high : BOOL;
+    low_3 : INT := 0;
+    high_3 : INT := 3;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[level := GVL.mb_Output_Registers[0];
+
+low := level <=  low_3;
+high := level >= high_3;
+pump := NOT(low) AND (high OR pump);
+
+GVL.mb_Input_Coils[0] := pump;
+  ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
