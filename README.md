@@ -33,7 +33,7 @@ L’honeypot è un simulatore di un sistema di trattamento dell’acqua composto
 ![phy_proc_sswat](img/simplified_SWAT_system.png)
 **Figure 1**: Simplified SWaT system physical process
 
-Ogni dispositivo viene eseguita su una macchina virtuale (Ubuntu Server, TC/BSD). Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP, mentre un altro processo python si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua e aggiornamento dell'HMI con i dati raccolti.
+Ogni dispositivo viene eseguita su una macchina virtuale (Ubuntu Server, TC/BSD). Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP, mentre un altro processo python si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua e aggiornamento dell'HMI con i dati raccolti.  
 ![schema logico](img/SchemaLogico.png)  
 **Figure 2**: Architettura del sistema
 
@@ -196,7 +196,7 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc.
 
 1. Seguire questo [tutorial](https://infosys.beckhoff.com/english.php?content=../content/1033/cx9020_hw/2241767691.html&id=) per impostare il sistema target (la VM)
 2. Impostare i registri usati da Modbus TCP e attivare la licenza, seguire questo [video](https://www.youtube.com/watch?v=qlNG5wZElYI)
-3. Attivare la configurazione e runnare il PLC3
+3. Attivare la configurazione e runnare il PLC3  
   ![Attivazione Configurazione](img/ActiveConf.png)
   ![Restart in run mode](img/RestartRunMode.png)
   ![Login](img/LoginBeckhoff.png)
