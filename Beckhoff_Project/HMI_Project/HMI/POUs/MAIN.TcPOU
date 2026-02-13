@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{759fd4c8-c070-42ec-8eeb-55fbb1069cba}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[HMI.level_1 := GVL.mb_Output_Registers[0];
+HMI.level_2 := GVL.mb_Output_Registers[1];
+HMI.level_3 := GVL.mb_Output_Registers[2];
+HMI.pump_1 := GVL.mb_Output_Coils[0];
+HMI.valve := GVL.mb_Output_Coils[1];
+HMI.pump_3 := GVL.mb_Output_Coils[2];
+
+IF HMI.level_2 >= 10 THEN
+	HMI.tubeOUT_2 := TRUE;
+ELSIF HMI.level_2 < 10 THEN
+	HMI.tubeOUT_2 := FALSE;
+END_IF;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

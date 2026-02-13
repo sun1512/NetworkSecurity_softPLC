@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="HMI" Id="{07a2b2e4-df84-4ed8-86b9-8555054100af}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	level_1 : INT := 45;
+	level_2 : INT := 0;
+	level_3 : INT := 0;
+	valve : BOOL;
+	pump_1 : BOOL;
+	pump_3 : BOOL;
+	tubeOUT_2 : BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

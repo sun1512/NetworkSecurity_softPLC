@@ -1,6 +1,6 @@
-PROGRAM PLC_PRG
+PROGRAM MAIN
 VAR
-    level : INT;
+    level : WORD;
     pump : BOOL;
     low : BOOL;
     high : BOOL;

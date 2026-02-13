@@ -6,8 +6,8 @@
   - [Analisi](#analisi)
   - [Implementazione](#implementazione)
   - [Difficoltà incontrate](#difficoltà-incontrate)
-    - [Migrazione PLC2](#migrazione-plc2)
-    - [Migrazione PLC3](#migrazione-plc3)
+    - [Migrazione CODESYS -\> OpenPLC (PLC2)](#migrazione-codesys---openplc-plc2)
+    - [Migrazione CODESYS -\> BECKHOFF (PLC3 e HMI)](#migrazione-codesys---beckhoff-plc3-e-hmi)
 - [Istruzioni per eseguire il progetto](#istruzioni-per-eseguire-il-progetto)
     - [Installazione VM Ubuntu Server](#installazione-vm-ubuntu-server)
   - [CODESYS (2 VM)](#codesys-2-vm)
@@ -18,22 +18,24 @@
   - [OpenPLC (1 VM)](#openplc-1-vm)
     - [1. Creazione PLC](#1-creazione-plc-1)
     - [2. Run PLC](#2-run-plc)
-  - [BECKHOFF (1 VM)](#beckhoff-1-vm)
+  - [BECKHOFF (2 VM)](#beckhoff-2-vm)
     - [1. Installazione VM](#1-installazione-vm)
-    - [2. Run PLC](#2-run-plc-1)
+    - [2. Run PLC e HMI](#2-run-plc-e-hmi)
 
 
 # Expanding an industrial Honeypot with new Soft PLCs
 ## Introduzione
-Nel mercato dell’automazione industriale sono presenti numerosi brand di PLC e, nella pratica, le aziende utilizzano spesso dispositivi differenti in base alle specifiche esigenze applicative. L’obiettivo di questo progetto è la realizzazione di un honeypot industriale che integri diversi tipi di soft PLC, al fine di simulare un ambiente eterogeneo e realistico. Partendo da un honeypot precedentemente sviluppato utilizzando PLC CODESYS, il progetto prevede la sostituzione del secondo PLC con un PLC di tipo OpenPLC e il terzo PLC con uno di tipo BECKHOFF, mantenendo invariata la logica di controllo rispetto alla versione originale.
-Questo approccio permette di riprodurre uno scenario più credibile, in cui coesistono PLC di brand differenti, migliorando il realismo e il valore del honeypot per attività di analisi e sicurezza. Infine, è prevista l’estrazione dell’HMI dal primo PLC (implementazione dell'honeypot di partenza), in modo che i diversi PLC comunichino direttamente con l’interfaccia operatore, eliminando la dipendenza dalla comunicazione tramite il primo PLC.
+Nel mercato dell’automazione industriale sono presenti numerosi brand di PLC e, nella pratica, le aziende utilizzano spesso dispositivi differenti in base alle specifiche esigenze applicative. L’obiettivo di questo progetto è la realizzazione di un honeypot industriale che integri diversi tipi di soft PLC, al fine di simulare un ambiente eterogeneo e realistico. Partendo da un honeypot precedentemente sviluppato utilizzando PLC CODESYS, il progetto prevede la sostituzione del secondo PLC con un dispositivo basato su OpenPLC e il terzo PLC con soluzioni BECKHOFF, mantenendo invariata la logica di controllo rispetto alla versione originale.  
+Questo approccio permette di riprodurre uno scenario più credibile, in cui coesistono PLC di brand differenti, migliorando il realismo e il valore del honeypot per attività di analisi e sicurezza.  
+È inoltre prevista l’estrazione dell’HMI dal primo PLC (implementazione dell'honeypot di partenza), in modo che i diversi PLC comunichino direttamente con l’interfaccia operatore, eliminando la dipendenza dalla comunicazione tramite il primo PLC. Questa modifica migliora l’architettura complessiva del sistema, rendendola più coerente con scenari industriali reali.  
+Infine, è prevista la realizzazione di un’ulteriore HMI in ambiente Beckhoff, con l’obiettivo di riprodurre uno scenario ancora più aderente a contesti industriali eterogenei.
 
 ## Descrizione del sistema industriale
-L’honeypot è un simulatore di un sistema di trattamento dell’acqua composto da tre vasche, ciascuna controllata da un PLC che gestisce l’attivazione di pompe e valvole, e da un HMI che consente di monitorare visivamente il funzionamento del sistema.
+L’honeypot è un simulatore di un sistema di trattamento dell’acqua composto da tre vasche, ciascuna controllata da un PLC che gestisce l’attivazione di pompe e valvole, e da un HMI che consente di monitorare visivamente il funzionamento del sistema.  
 ![phy_proc_sswat](img/simplified_SWAT_system.png)
 **Figure 1**: Simplified SWaT system physical process
 
-Ogni dispositivo viene eseguita su una macchina virtuale (Ubuntu Server, TC/BSD). Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP, mentre un altro processo python si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua e aggiornamento dell'HMI con i dati raccolti.  
+Ogni dispositivo viene eseguita su una macchina virtuale (Ubuntu Server, TwinCAT/BSD). Un processo python si occupa dell'interazione tra PLC1 e PLC2 utilizzando Modbus TCP come protocollo di comunicazione, mentre un altro programma python si occupa del processo fisico sempre con Modbus TCP, responsabile della lettura dei dati dei vari PLC e della modifica dei livelli dell'acqua e aggiornamento dell'HMI con i dati raccolti.  
 ![schema logico](img/SchemaLogico.png)  
 **Figure 2**: Architettura del sistema
 
@@ -46,17 +48,19 @@ Tale analisi ha consentito di identificare i registri utilizzati per la comunica
 ## Implementazione
 Sulla base dei risultati emersi dalla fase preliminare di analisi, è stata effettuata la migrazione del PLC2 dall’ambiente CODESYS a OpenPLC. Nell’implementazione della nuova logica di controllo sono stati utilizzati due registri Modbus principali: uno dedicato alla gestione del livello dell’acqua e uno relativo alla richiesta di apertura della valvola.
 
-Per la gestione del livello dell’acqua è stato mantenuto l’utilizzo di un holding register, consentendo al processo fisico simulato in Python di scrivere il valore del livello direttamente nel PLC. Per quanto riguarda il request di apertura della valvola, il registro è stato modificato da discrete input a coil, al fine di permettere la scrittura del valore da parte del PLC e la successiva lettura da parte del processo fisico, garantendo così una corretta bidirezionalità dello scambio di informazioni.  
+Per la gestione del livello dell’acqua è stato mantenuto l’utilizzo di un _holding register_, consentendo al processo fisico simulato in Python di scrivere il valore del livello direttamente nel PLC. Per quanto riguarda il request di apertura della valvola, il registro è stato modificato da _discrete input_ a _coil_, al fine di permettere la scrittura del valore da parte del PLC e la successiva lettura da parte del processo fisico, garantendo così una corretta bidirezionalità dello scambio di informazioni.  
 
-Relativamente all’HMI, è stata riutilizzata la componente grafica precedentemente implementata, separandola dalla logica di controllo del PLC1. In modo analogo alla versione originale del sistema, sono stati configurati tre holding register per la visualizzazione dei livelli dell’acqua e tre coil per il controllo degli attuatori, in particolare pompa1, pompa3 e valvola.
+Relativamente all’HMI, è stata riutilizzata la componente grafica precedentemente implementata, separandola dalla logica di controllo del PLC1. In modo analogo alla versione originale del sistema, sono stati configurati tre _holding register_ per la visualizzazione dei livelli dell’acqua e tre coil per il controllo degli attuatori, in particolare pompa1, pompa3 e valvola.
 
 In seguito alla modifica dei registri Modbus, sono stati aggiornati il processo fisico e la logica di comunicazione tra PLC1 e PLC2, riorganizzando le funzioni EasyModbus in coerenza con la nuova struttura dei registri.
 
-Nella migrazione del PLC3 dall’ambiente CODESYS a BECKHOFF è stato mantenuto lo stesso schema dei registri utilizzato nell’implementazione precedente (Holding register per il livello dell'acqua e discrete input per il valore booleano della pompa), apportando le modifiche necessarie al programma PLC per adattarlo al nuovo ambiente di sviluppo TwinCAT. È stato inoltre adeguato il processo fisico al fine di allinearlo alla configurazione degli indirizzi dei registri prevista in TwinCAT.
+Nella migrazione del PLC3 dall’ambiente CODESYS a BECKHOFF è stato mantenuto lo stesso schema dei registri utilizzato nell’implementazione precedente (_Holding register_ per il livello dell'acqua e _discrete input_ per il valore booleano che gestisce la pompa), apportando le modifiche necessarie al programma PLC per adattarlo al nuovo ambiente di sviluppo TwinCAT. È stato inoltre adeguato il processo fisico al fine di allinearlo alla configurazione degli indirizzi dei registri prevista in TwinCAT.
+
+Infine, è stata sviluppata una nuova HMI in ambiente Beckhoff, mantenendo la medesima struttura grafica dell’HMI precedentemente realizzata. L’interfaccia utilizza tre Holding Register e tre Coil per la visualizzazione e il monitoraggio dei valori generati dal processo fisico.
 
 ## Difficoltà incontrate
 
-### Migrazione PLC2
+### Migrazione CODESYS -> OpenPLC (PLC2)
 
 La principale difficoltà riscontrata è legata alla diversa gestione dei registri Modbus tra PLC CODESYS e OpenPLC. In CODESYS la gestione dei registri è molto flessibile e consente di mappare liberamente le variabili PLC su qualsiasi area Modbus, senza vincoli rigidi sul tipo di registro o sui permessi di accesso. Questo permette, ad esempio, di scrivere anche su registri che nello standard Modbus TCP sono definiti come di sola lettura.  
 
@@ -66,18 +70,19 @@ Nel progetto, su PLC2 in CODESYS la variabile `request`, utilizzata per comandar
 
 Per risolvere il problema è stato necessario modificare la mappatura dei registri, assegnando la variabile `request` a una Coil (`%QX`), che consente sia la lettura sia la scrittura in conformità allo standard Modbus TCP, garantendo così il corretto funzionamento del sistema.
 
-### Migrazione PLC3
-La principale difficoltà riscontrata durante la migrazione ha riguardato l’utilizzo del protocollo Modbus TCP. A differenza di CODESYS, in cui i registri Modbus venivano mappati direttamente alle variabili dichiarate nel programma, in ambiente Beckhoff (TwinCAT) la gestione risulta differente: i registri devono essere dichiarati esplicitamente come variabili globali e associati a specifici indirizzi di memoria.
+### Migrazione CODESYS -> BECKHOFF (PLC3 e HMI)
+La principale difficoltà riscontrata durante la migrazione ha riguardato l’utilizzo del protocollo Modbus TCP. A differenza dell’ambiente CODESYS, in cui i registri Modbus venivano mappati direttamente alle variabili dichiarate nel programma PLC, in ambiente Beckhoff (TwinCAT) la gestione del protocollo richiede che i registri siano dichiarati esplicitamente come variabili globali e associati a specifici indirizzi di memoria, definiti in un apposito file di configurazione.
 
-È stato inoltre riscontrato un problema relativo all’indirizzamento dei registri. Beckhoff utilizza una convenzione di indirizzamento differente rispetto a quella adottata da EasyModbus; tale disallineamento non consentiva la modifica dei registri tramite EasyModbus, generando eccezioni durante le operazioni di lettura e scrittura.
+La modalità di indirizzamento adottata da TwinCAT ha generato ulteriori problemi nell’integrazione con EasyModbus. Beckhoff utilizza infatti una convenzione di indirizzamento differente (riportata nel file di configurazione di default) rispetto a quella prevista da EasyModbus; tale disallineamento impediva la corretta modifica dei registri tramite il client Modbus, generando eccezioni durante le operazioni di lettura e scrittura.
 
-Per risolvere la problematica, si è deciso di adeguare le chiamate ai metodi Modbus specificando gli indirizzi dei registri secondo la convenzione utilizzata da Beckhoff, come riportato nel file di configurazione dei registri. Questa modifica ha permesso di ristabilire il corretto accesso ai registri, consentendo sia la lettura sia la scrittura dei dati
+Per risolvere la problematica, si è deciso di adeguare le chiamate ai metodi Modbus specificando gli indirizzi dei registri secondo la convenzione utilizzata da Beckhoff, come riportato nel file di configurazione dei registri. Questa modifica ha permesso di ristabilire il corretto accesso ai registri, consentendo sia la lettura sia la scrittura dei dati.
 
-In particolare, l’accesso ai registri (Holding Register e Discrete Input) è stato effettuato utilizzando l’offset 32768, necessario per allineare l’indirizzamento Modbus alla struttura interna dei registri in ambiente TwinCAT.
+In particolare, l’accesso ai registri (Holding Register e Discrete Input) è stato effettuato partendo da un offset pari a _32768_, necessario per allineare l’indirizzamento Modbus alla struttura interna dei registri in ambiente TwinCAT.
 
 # Istruzioni per eseguire il progetto
-Il progetto è composto da quattro macchine virtuali:
-* HMI – Ubuntu Server
+Il progetto è composto da cinque macchine virtuali:
+* HMI – Ubuntu Server (Codesys)
+* HMI - TC/BSD con TwinCAT (Beckhoff)
 * PLC1 – Ubuntu Server con CODESYS
 * PLC2 – Ubuntu Server con OpenPLC
 * PLC3 – TC/BSD con TwinCAT (Beckhoff)
@@ -135,7 +140,7 @@ Ogni dispositivo ethernet va settato correttamente: quindi doppio click sul disp
 
 ### 3. Login CODESYS e start
 Per eseguire lo start, tasto destro su Application e poi login. Verrà visualizzata una schemata dove verranno chieste le credenziali che sono state inserite nella fase 1. 
-Una volta inserite correttamente, la PLC sono in esecuzione. 
+Una volta inserite correttamente, la PLC sono in esecuzione.  
 ![Login](img/Login.png)
 
 
@@ -168,31 +173,35 @@ cd OpenPLC_v3
 
 ### 2. Run PLC
 Una volta fatto, andare all'indirizzo `http://<indirizzo IP del VM>:8080` che porta all'interfaccia web del plc (fare login con le credenziali: username -> openplc, password -> openplc)
-al quale si dovrà inserire il programma corrispondente (_PLC2.st_) e runnare il plc.
+al quale si dovrà inserire il programma corrispondente (_PLC2.st_) e runnare il plc.  
 ![Add program file](img/OpenPLCweb.png)
 
 
-## BECKHOFF (1 VM)
+## BECKHOFF (2 VM)
 
 ### 1. Installazione VM
 
-Per la plc3 si è deciso di utilizzare una VM TwinCAT/BSD:
+Per installare la VM TwinCAT/BSD seguire i seguenti passaggi:
 1. Scaricare l'immagine iso dal sito di [Beckhoff](https://www.beckhoff.com/it-it/products/ipc/software-and-tools/operating-systems/c9900-s6xx-cxxxxx-0185.html?)
 2. Clonare la [repository](https://github.com/r9guy/TwinCAT-BSD-VM-creator) e seguire le istruzioni per installare la VM presenti nel [tutorial](https://cookncode.com/twincat/2022/08/11/twincat-bsd.html)
-3. Nella VM installare il pacchetto ModbusTCP (come mostrato [qui](https://infosys.beckhoff.com/english.php?content=../content/1033/tf6250_tc3_modbus_tcp/11519180811.html&id=)):  
+3. Nella VM installare i pacchetti necessari (come mostrato [qui](https://infosys.beckhoff.com/english.php?content=../content/1033/tf6250_tc3_modbus_tcp/11519180811.html&id=)):  
     ```sh
+    # Pacchetto Modbus TCP
     doas pkg install TF6250-Modbus-TCP
+    # Pacchetto HMI Web (solo per il HMI)
+    doas pkg install TF1810-PLC-HMI-Web
     ```
 4. Aggiungi la regola al firewall per aprire la porta 502:
-      ```sh
-      sudo ee /etc/pf.conf
-      # Aggiungi questa regola nel file
-      pass in quick proto tcp from any to any port 502 flags S/SA keep state
-      # Salva ed esci
-      ```
+    ```sh
+    sudo ee /etc/pf.conf
+    # Aggiungi questa regola nel file
+    pass in quick proto tcp from any to any port 502 flags S/SA keep state
+    # Salva ed esci
+    esc -> a -> a
+    ```
 
-### 2. Run PLC
-Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc.
+### 2. Run PLC e HMI
+Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc e hmi.
 
 1. Seguire questo [tutorial](https://infosys.beckhoff.com/english.php?content=../content/1033/cx9020_hw/2241767691.html&id=) per impostare il sistema target (la VM)
 2. Impostare i registri usati da Modbus TCP e attivare la licenza, seguire questo [video](https://www.youtube.com/watch?v=qlNG5wZElYI)
@@ -201,3 +210,5 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc.
   ![Restart in run mode](img/RestartRunMode.png)
   ![Login](img/LoginBeckhoff.png)
   ![Start](img/Start.png)
+
+Per visualizzare l'interfaccia grafica del sistema aprire il browser, digitare `https://<IP VM con HMI>/Tc3PlcHmiWeb/Port_851/Visu/webvisu.htm` e runnare i programmi Python per collegare i PLC del sistema con l'HMI.

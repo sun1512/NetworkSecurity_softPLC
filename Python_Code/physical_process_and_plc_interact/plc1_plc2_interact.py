@@ -1,8 +1,8 @@
 import time
 import easymodbus.modbusClient
 
-TARGET1 = "192.168.1.219"   # plc1 codesys
-TARGET2 = "192.168.1.15"    # plc2 openplc
+TARGET1 = "192.168.1.219"   # plc1 CODESYS
+TARGET2 = "192.168.1.15"    # plc2 OpenPLC
 
 plc1 = easymodbus.modbusClient.ModbusClient(TARGET1, 502)
 plc1.connect()
@@ -15,7 +15,6 @@ plc2.timeout = 500000
 
 while True:
     try:
-        
         '''
         lettura request da parte di plc2 (apertura o chiusura della valvola tra vasca1 e vasca2 basandosi sul livello di acqua di vasca2)
         e inoltro a plc1
