@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4026.20">
-	<Project ProjectGUID="{034E07D3-30BD-4E79-9B2D-1C7B1055993A}" TargetNetId="39.243.143.4.1.1" Target64Bit="true" ShowHideConfigurations="#x6">
+	<Project ProjectGUID="{034E07D3-30BD-4E79-9B2D-1C7B1055993A}" TargetNetId="39.97.200.146.1.1" Target64Bit="true" ShowHideConfigurations="#x6">
 		<System>
+			<Licenses>
+				<Target>
+					<ManualSelect>{6952449D-F68C-49A2-ADE4-8639D85B33A4}</ManualSelect>
+				</Target>
+			</Licenses>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PlcTask</Name>
@@ -10,7 +15,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{5E308569-E3A4-4364-8FF0-B6A19C2B26F5}" Name="Device3" PrjFilePath="Device3\Device3.plcproj" TmcFilePath="Device3\Device3.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{5F2F8AC0-B2BF-01EE-C4C4-6900ADAA07EC}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{5F2F8AC0-B2BF-01EE-C4C4-6900ADAA07EC}" TmcPath="Device3\Device3.tmc">
 					<Name>Device3 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

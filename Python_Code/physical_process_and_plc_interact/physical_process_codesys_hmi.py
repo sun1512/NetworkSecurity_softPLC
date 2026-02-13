@@ -4,10 +4,9 @@ import easymodbus.modbusClient
 # Indirizzii IP PLC
 TARGET1 = "192.168.1.219"   # PLC1 CODESYS
 TARGET2 = "192.168.1.15"    # PLC2 OpenPLC
-TARGET3 = "192.168.1.240"   # PLC3 BECKHOFF TwinCAT/BSD
+TARGET3 = "192.168.1.60"    # PLC3 BECKHOFF TwinCAT/BSD
 TARGET4 = "192.168.1.79"    # hmi1 in CODESYS
-TARGET5 = "192.168.1.175"   # hmi1 in BECKHOFF TwinCAT/BSD
-
+TARGET5 = "192.168.1.21"    # hmi1 in BECKHOFF TwinCAT/BSD
 
 # Connessione ai PLC
 plc1 = easymodbus.modbusClient.ModbusClient(TARGET1, 502)

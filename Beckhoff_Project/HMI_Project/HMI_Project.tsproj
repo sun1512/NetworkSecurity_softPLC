@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4026.20">
-	<Project ProjectGUID="{07FD92BC-9343-42B7-BF22-52A466406961}" TargetNetId="39.255.67.88.1.1" Target64Bit="true" ShowHideConfigurations="#x6">
+	<Project ProjectGUID="{07FD92BC-9343-42B7-BF22-52A466406961}" TargetNetId="39.178.159.163.1.1" Target64Bit="true" ShowHideConfigurations="#x6">
 		<System>
+			<Licenses>
+				<Target>
+					<ManualSelect>{6952449D-F68C-49A2-ADE4-8639D85B33A4}</ManualSelect>
+				</Target>
+			</Licenses>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PlcTask</Name>
@@ -13,7 +18,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{993CC1A6-342B-4DAD-B948-4F4DE6AB1659}" Name="HMI" PrjFilePath="HMI\HMI.plcproj" TmcFilePath="HMI\HMI.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{C4D0A6A8-9FAB-86FA-3444-10C858F38984}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{812C1BF2-7E7C-E11D-7006-1CD4303DFA2B}" TmcPath="HMI\HMI.tmc">
 					<Name>HMI Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

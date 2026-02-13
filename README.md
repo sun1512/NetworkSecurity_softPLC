@@ -184,14 +184,15 @@ al quale si dovrà inserire il programma corrispondente (_PLC2.st_) e runnare il
 Per installare la VM TwinCAT/BSD seguire i seguenti passaggi:
 1. Scaricare l'immagine iso dal sito di [Beckhoff](https://www.beckhoff.com/it-it/products/ipc/software-and-tools/operating-systems/c9900-s6xx-cxxxxx-0185.html?)
 2. Clonare la [repository](https://github.com/r9guy/TwinCAT-BSD-VM-creator) e seguire le istruzioni per installare la VM presenti nel [tutorial](https://cookncode.com/twincat/2022/08/11/twincat-bsd.html)
-3. Nella VM installare i pacchetti necessari (come mostrato [qui](https://infosys.beckhoff.com/english.php?content=../content/1033/tf6250_tc3_modbus_tcp/11519180811.html&id=)):  
+3. Impostare la scheda di rete della VM in modalità _Scheda con bridge_
+4. Nella VM installare i pacchetti necessari (come mostrato [qui](https://infosys.beckhoff.com/english.php?content=../content/1033/tf6250_tc3_modbus_tcp/11519180811.html&id=)):  
     ```sh
     # Pacchetto Modbus TCP
     doas pkg install TF6250-Modbus-TCP
     # Pacchetto HMI Web (solo per il HMI)
     doas pkg install TF1810-PLC-HMI-Web
     ```
-4. Aggiungi la regola al firewall per aprire la porta 502:
+5. Aggiungi la regola al firewall per aprire la porta 502:
     ```sh
     sudo ee /etc/pf.conf
     # Aggiungi questa regola nel file
@@ -205,7 +206,12 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc e hmi.
 
 1. Seguire questo [tutorial](https://infosys.beckhoff.com/english.php?content=../content/1033/cx9020_hw/2241767691.html&id=) per impostare il sistema target (la VM)
 2. Impostare i registri usati da Modbus TCP e attivare la licenza, seguire questo [video](https://www.youtube.com/watch?v=qlNG5wZElYI)
-3. Attivare la configurazione e runnare il PLC3  
+    ```sh
+    SYSTEM -> License -> Manage Licenses
+    # scegliere cpu license dei pacchetti installati nella VM
+    ```
+3. Attivare la configurazione e runnare il PLC3 e HMI  
+  (Per HMI andare in _Visualization Manager_ e attivare la voce _Support client animations and overlay of native elements_)  
   ![Attivazione Configurazione](img/ActiveConf.png)
   ![Restart in run mode](img/RestartRunMode.png)
   ![Login](img/LoginBeckhoff.png)
