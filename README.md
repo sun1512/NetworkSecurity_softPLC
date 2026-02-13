@@ -209,7 +209,11 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc e hmi.
     ```sh
     SYSTEM -> License -> Manage Licenses
     # scegliere cpu license dei pacchetti installati nella VM
-    ```
+    ```  
+    ![License](img/License.png)
+    ![Manage license](img/ManageLicense.png)
+    ![7 day Trial license](img/TrialLicense.png)
+
 3. Attivare la configurazione e runnare il PLC3 e HMI  
   (Per HMI andare in _Visualization Manager_ e attivare la voce _Support client animations and overlay of native elements_)  
   ![Attivazione Configurazione](img/ActiveConf.png)
