@@ -5,8 +5,9 @@ import easymodbus.modbusClient
 TARGET1 = "192.168.1.219"   # PLC1 CODESYS
 TARGET2 = "192.168.1.15"    # PLC2 OpenPLC
 TARGET3 = "192.168.1.60"    # PLC3 BECKHOFF TwinCAT/BSD
-TARGET4 = "192.168.1.79"    # hmi1 in CODESYS
-TARGET5 = "192.168.1.21"    # hmi1 in BECKHOFF TwinCAT/BSD
+TARGET4 = "192.168.1.79"    # hmi1 CODESYS
+TARGET5 = "192.168.1.21"    # hmi1 BECKHOFF TwinCAT/BSD
+TARGET6 = "192.168.1.63"    # hmi3 OpenPLC
 
 # Connessione ai PLC
 plc1 = easymodbus.modbusClient.ModbusClient(TARGET1, 502)
@@ -24,6 +25,9 @@ hmi1.connect()
 hmi2 = easymodbus.modbusClient.ModbusClient(TARGET5, 502)
 hmi2.connect()
 
+hmi3 = easymodbus.modbusClient.ModbusClient(TARGET6, 502)
+hmi3.connect()
+
 
 # Inizializzazione variabili
 count_water1 = 45
@@ -35,17 +39,20 @@ plc2.timeout = 500000
 plc3.timeout = 500000
 hmi1.timeout = 500000
 hmi2.timeout = 500000
+hmi3.timeout = 500000
 
 
 def hmi_write_coil(index: int, value: bool):
     '''Passa all'HMI i valori di pompa e valvola tramita coil'''
     hmi1.write_single_coil(index, value)
     hmi2.write_single_coil(32768 + index, value)
+    hmi3.write_single_coil(index, value)
 
 def hmi_write_register(index: int, value: int):
     '''Passa all'HMI il livello dell'acqua tramite Holding register'''
     hmi1.write_single_register(index, value)
     hmi2.write_single_register(32768 + index, value)
+    hmi3.write_single_register(index, value)
 
 def initialize_variable():
     while True:
@@ -77,6 +84,7 @@ def initialize_variable():
             plc3.close()
             hmi1.close()
             hmi2.close()
+            hmi3.close()
             break
 
 
@@ -159,6 +167,8 @@ while True:
             hmi1.close()
         if hmi2.is_connected():
             hmi2.close()
+        if hmi3.is_connected():
+            hmi3.close()
         break
     except Exception as e:
         print("Close connection")
@@ -173,6 +183,8 @@ while True:
             hmi1.close()
         if hmi2.is_connected():
             hmi2.close()
+        if hmi3.is_connected():
+            hmi3.close()
         break
 
 

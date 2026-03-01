@@ -15,9 +15,10 @@
     - [2. Modbus TCP](#2-modbus-tcp)
     - [3. Login CODESYS e start](#3-login-codesys-e-start)
     - [4. Hmi e schermata di login](#4-hmi-e-schermata-di-login)
-  - [OpenPLC (1 VM)](#openplc-1-vm)
+  - [OpenPLC (2 VM)](#openplc-2-vm)
     - [1. Creazione PLC](#1-creazione-plc-1)
     - [2. Run PLC](#2-run-plc)
+    - [3. Visualizzazione HMI](#3-visualizzazione-hmi)
   - [BECKHOFF (2 VM)](#beckhoff-2-vm)
     - [1. Installazione VM](#1-installazione-vm)
     - [2. Run PLC e HMI](#2-run-plc-e-hmi)
@@ -28,7 +29,7 @@
 Nel mercato dell’automazione industriale sono presenti numerosi brand di PLC e, nella pratica, le aziende utilizzano spesso dispositivi differenti in base alle specifiche esigenze applicative. L’obiettivo di questo progetto è la realizzazione di un honeypot industriale che integri diversi tipi di soft PLC, al fine di simulare un ambiente eterogeneo e realistico. Partendo da un honeypot precedentemente sviluppato utilizzando PLC CODESYS, il progetto prevede la sostituzione del secondo PLC con un dispositivo basato su OpenPLC e il terzo PLC con soluzioni BECKHOFF, mantenendo invariata la logica di controllo rispetto alla versione originale.  
 Questo approccio permette di riprodurre uno scenario più credibile, in cui coesistono PLC di brand differenti, migliorando il realismo e il valore del honeypot per attività di analisi e sicurezza.  
 È inoltre prevista l’estrazione dell’HMI dal primo PLC (implementazione dell'honeypot di partenza), in modo che i diversi PLC comunichino direttamente con l’interfaccia operatore, eliminando la dipendenza dalla comunicazione tramite il primo PLC. Questa modifica migliora l’architettura complessiva del sistema, rendendola più coerente con scenari industriali reali.  
-Infine, è prevista la realizzazione di un’ulteriore HMI in ambiente Beckhoff, con l’obiettivo di riprodurre uno scenario ancora più aderente a contesti industriali eterogenei.
+Infine, è prevista la realizzazione di un’ulteriore HMI in ambiente Beckhoff e l’integrazione di una HMI in OpenPLC con Scada-LTS, già fornita in precedenza, con l’obiettivo di riprodurre uno scenario ancora più aderente a contesti industriali eterogenei.
 
 ## Descrizione del sistema industriale
 L’honeypot è un simulatore di un sistema di trattamento dell’acqua composto da tre vasche, ciascuna controllata da un PLC che gestisce l’attivazione di pompe e valvole, e da un HMI che consente di monitorare visivamente il funzionamento del sistema.  
@@ -58,6 +59,8 @@ Nella migrazione del PLC3 dall’ambiente CODESYS a BECKHOFF è stato mantenuto 
 
 Infine, è stata sviluppata una nuova HMI in ambiente Beckhoff, mantenendo la medesima struttura grafica dell’HMI precedentemente realizzata. L’interfaccia utilizza tre Holding Register e tre Coil per la visualizzazione e il monitoraggio dei valori generati dal processo fisico.
 
+Successivamente, è stata integrata l’HMI fornita per OpenPLC con Scada-LTS, modificando opportunamente i registri e l’indirizzo IP del PLC dal quale vengono acquisiti i dati, garantendo la corretta visualizzazione del sistema.
+
 ## Difficoltà incontrate
 
 ### Migrazione CODESYS -> OpenPLC (PLC2)
@@ -80,9 +83,10 @@ Per risolvere la problematica, si è deciso di adeguare le chiamate ai metodi Mo
 In particolare, l’accesso ai registri (Holding Register e Discrete Input) è stato effettuato partendo da un offset pari a _32768_, necessario per allineare l’indirizzamento Modbus alla struttura interna dei registri in ambiente TwinCAT.
 
 # Istruzioni per eseguire il progetto
-Il progetto è composto da cinque macchine virtuali:
+Il progetto è composto da sei macchine virtuali e un container docker per Scada-LTS:
 * HMI – Ubuntu Server (Codesys)
 * HMI - TC/BSD con TwinCAT (Beckhoff)
+* HMI - Ubuntu Server (OpenPLC)
 * PLC1 – Ubuntu Server con CODESYS
 * PLC2 – Ubuntu Server con OpenPLC
 * PLC3 – TC/BSD con TwinCAT (Beckhoff)
@@ -162,7 +166,7 @@ Runnare tutte le PLC e i codici python. A questo punto aprire il browser e digit
 ![CONTROLPANEL](img/ControlPanelVisu.png)
 **Figure 2**: Control Panel
 
-## OpenPLC (1 VM)
+## OpenPLC (2 VM)
 ### 1. Creazione PLC
 Nella VM linux eseguire i seguenti comandi per installare il runtime di OpenPLC su linux:
 ```sh
@@ -173,9 +177,27 @@ cd OpenPLC_v3
 
 ### 2. Run PLC
 Una volta fatto, andare all'indirizzo `http://<indirizzo IP del VM>:8080` che porta all'interfaccia web del plc (fare login con le credenziali: username -> openplc, password -> openplc)
-al quale si dovrà inserire il programma corrispondente (_PLC2.st_) e runnare il plc.  
+al quale si dovrà inserire il programma corrispondente (_PLC_Code/PLC2.st_, _PLC_Code/HMI.st_) e runnare il plc.  
 ![Add program file](img/OpenPLCweb.png)
 
+### 3. Visualizzazione HMI
+L'HMI viene viene visualizzato tramite Scada-LTS, implementato usando un container docker.  
+Per impostare Scada-LTS seguire i seguenti passaggi:
+1. Dirigersi nella cartella _HMI_ScadaLTS_ e [runnare docker](https://github.com/SCADA-LTS/Scada-LTS/wiki#booting-the-application):
+   ```sh
+   docker-compose up
+   # NOTA: se non parte eseguire i comandi separatamente
+   docker-compose database
+   docker-compose scadalts
+   ```
+
+2. Aprire l'interfaccia web di Scada-LTS all'indirizzo `http://localhost:8080/Scada-LTS` e accedere con _admin_::_admin_
+3. Inserire i dati dell'HMI (presenti in _HMI_ScadaLTS/HMI_data.txt_)  
+   ![Inserire Dati HMI](img/ImportDataHMI.png)
+4. Modificare indirizzo con quello dell'HMI OpenPLC per la lettura dei registri  
+   ![Modifica del data source](img/ModifyDataSource.png)  
+   ![inserimento del nuovo indirizzo](img/SetIP.png)
+5. Andare in graphical view per la visualizzazione grafica.
 
 ## BECKHOFF (2 VM)
 
@@ -214,7 +236,10 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc e hmi.
     ![Manage license](img/ManageLicense.png)
     ![7 day Trial license](img/TrialLicense.png)
 
-3. Attivare la configurazione e runnare il PLC3 e HMI  
+3. Impostare l'Auto boot in run mode  
+   ![Auto boot in run mode](img/AutoBootRunMode.png)
+
+4. Attivare la configurazione e runnare il PLC3 e HMI  
   (Per HMI andare in _Visualization Manager_ e attivare la voce _Support client animations and overlay of native elements_)  
   ![Attivazione Configurazione](img/ActiveConf.png)
   ![Restart in run mode](img/RestartRunMode.png)
