@@ -92,7 +92,7 @@ Il progetto è composto da sei macchine virtuali e un container docker per Scada
 * PLC3 – TC/BSD con TwinCAT (Beckhoff)
   
 ### Installazione VM Ubuntu Server
-Scaricare immagine iso [Ubuntu server 24.04](https://ubuntu.com/download/server) e creare 3 VM, due PLC (codesys e openplc) e una HMI. Una volta installato configurare correttamente l'ssh: 
+Scaricare immagine iso [Ubuntu server 24.04](https://ubuntu.com/download/server) e creare 4 VM, due PLC (codesys e openplc) e due HMI (codesys e openplc). Una volta installato configurare correttamente l'ssh: 
 ```sh
 sudo apt install openssh-server
 sudo systemctl enable ssh
