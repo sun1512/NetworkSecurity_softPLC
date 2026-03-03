@@ -19,6 +19,8 @@
     - [1. Creazione PLC](#1-creazione-plc-1)
     - [2. Run PLC](#2-run-plc)
     - [3. Visualizzazione HMI](#3-visualizzazione-hmi)
+      - [- Docker](#--docker)
+      - [- VM](#--vm)
   - [BECKHOFF (2 VM)](#beckhoff-2-vm)
     - [1. Installazione VM](#1-installazione-vm)
     - [2. Run PLC e HMI](#2-run-plc-e-hmi)
@@ -83,10 +85,10 @@ Per risolvere la problematica, si è deciso di adeguare le chiamate ai metodi Mo
 In particolare, l’accesso ai registri (Holding Register e Discrete Input) è stato effettuato partendo da un offset pari a _32768_, necessario per allineare l’indirizzamento Modbus alla struttura interna dei registri in ambiente TwinCAT.
 
 # Istruzioni per eseguire il progetto
-Il progetto è composto da sei macchine virtuali e un container docker per Scada-LTS:
+Il progetto è composto da sei macchine virtuali:
 * HMI – Ubuntu Server (Codesys)
 * HMI - TC/BSD con TwinCAT (Beckhoff)
-* HMI - Ubuntu Server (OpenPLC)
+* HMI - Ubuntu Server (OpenPLC & Scada-LTS)
 * PLC1 – Ubuntu Server con CODESYS
 * PLC2 – Ubuntu Server con OpenPLC
 * PLC3 – TC/BSD con TwinCAT (Beckhoff)
@@ -181,6 +183,7 @@ al quale si dovrà inserire il programma corrispondente (_PLC_Code/PLC2.st_, _PL
 ![Add program file](img/OpenPLCweb.png)
 
 ### 3. Visualizzazione HMI
+#### - Docker 
 L'HMI viene viene visualizzato tramite Scada-LTS, implementato usando un container docker.  
 Per impostare Scada-LTS seguire i seguenti passaggi:
 1. Dirigersi nella cartella _HMI_ScadaLTS_ e [runnare docker](https://github.com/SCADA-LTS/Scada-LTS/wiki#booting-the-application):
@@ -194,10 +197,34 @@ Per impostare Scada-LTS seguire i seguenti passaggi:
 2. Aprire l'interfaccia web di Scada-LTS all'indirizzo `http://localhost:8080/Scada-LTS` e accedere con _admin_::_admin_
 3. Inserire i dati dell'HMI (presenti in _HMI_ScadaLTS/HMI_data.txt_)  
    ![Inserire Dati HMI](img/ImportDataHMI.png)
-4. Modificare indirizzo con quello dell'HMI OpenPLC per la lettura dei registri  
+4. Modificare indirizzo con quello dell'HMI OpenPLC per la lettura dei registri e salvare    
    ![Modifica del data source](img/ModifyDataSource.png)  
    ![inserimento del nuovo indirizzo](img/SetIP.png)
 5. Andare in graphical view per la visualizzazione grafica.
+
+#### - VM
+L'HMI viene viene visualizzato tramite Scada-LTS, installato all'interno della VM HMI di OpenPLC.
+Per installare Scada-LTS seguire i seguenti passaggi:
+
+1. Installare libreria e tool necessari al proseguimento dell'installazione
+   ```sh
+   # Creare un symlink con la libreria libaio.so.1 usata dagli script di installazione
+   # Dovuto al cambio dei nomi delle libreria di Ubuntu 24.04
+   sudo apt install libaio1t64
+   sudo ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
+   sudo ldconfig
+
+   # Installare il tool di unzip
+   sudo apt install unzip -y
+   ```
+2. Clonare la [repository](https://github.com/SCADA-LTS/linux-installer) contenenti gli script di installazione
+   ```sh
+   git clone https://github.com/SCADA-LTS/linux-installer
+   ```
+3. Seguire i passaggi di installazione presenti nel README del repository e impostare la porta del server Tomcat a `8081` (Diversa da quella di OpenPLC)
+4. Una volta installato, dirigersi all'indirizzo `http://<IP VM con HMI>:8081/Scada-LTS` e accedere con _admin_::_admin_
+5. Importare i dati HMI presenti nel file _HMI_ScadaLTS/HMI_data.txt_ e configurare i data source alla lettura dei registri all'indirizzo `127.0.0.1`
+   
 
 ## BECKHOFF (2 VM)
 
@@ -232,9 +259,9 @@ Una volta installato la VM apri l'IDE TcXaeShell per configurare il plc e hmi.
     SYSTEM -> License -> Manage Licenses
     # scegliere cpu license dei pacchetti installati nella VM
     ```  
-    ![License](img/License.png)
-    ![Manage license](img/ManageLicense.png)
-    ![7 day Trial license](img/TrialLicense.png)
+    ![License](img/License.png)  
+    ![Manage license](img/ManageLicense.png)  
+    ![7 day Trial license](img/TrialLicense.png)  
 
 3. Impostare l'Auto boot in run mode  
    ![Auto boot in run mode](img/AutoBootRunMode.png)

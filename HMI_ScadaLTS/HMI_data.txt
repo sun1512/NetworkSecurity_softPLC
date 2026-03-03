@@ -218,11 +218,8 @@
          "xid":"DS_177852",
          "type":"MODBUS_IP",
          "alarmLevels":{
-            "INITIALIZATION_EXCEPTION":"URGENT",
             "POINT_WRITE_EXCEPTION":"URGENT",
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT",
             "DATA_SOURCE_EXCEPTION":"URGENT",
-            "MONITOR_WRITE_EXCEPTION":"URGENT",
             "POINT_READ_EXCEPTION":"URGENT"
          },
          "updatePeriodType":"MILLISECONDS",
@@ -232,7 +229,7 @@
          "createSocketMonitorPoint":false,
          "enabled":true,
          "encapsulated":false,
-         "host":"192.168.1.63",
+         "host":"127.0.0.1",
          "maxReadBitCount":2000,
          "maxReadRegisterCount":125,
          "maxWriteRegisterCount":120,
@@ -247,11 +244,8 @@
          "xid":"DS_401789",
          "type":"MODBUS_IP",
          "alarmLevels":{
-            "INITIALIZATION_EXCEPTION":"URGENT",
             "POINT_WRITE_EXCEPTION":"URGENT",
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT",
             "DATA_SOURCE_EXCEPTION":"URGENT",
-            "MONITOR_WRITE_EXCEPTION":"URGENT",
             "POINT_READ_EXCEPTION":"URGENT"
          },
          "updatePeriodType":"MILLISECONDS",
@@ -261,7 +255,7 @@
          "createSocketMonitorPoint":false,
          "enabled":true,
          "encapsulated":false,
-         "host":"192.168.1.63",
+         "host":"127.0.0.1",
          "maxReadBitCount":2000,
          "maxReadRegisterCount":125,
          "maxWriteRegisterCount":120,
@@ -276,11 +270,8 @@
          "xid":"DS_357366",
          "type":"MODBUS_IP",
          "alarmLevels":{
-            "INITIALIZATION_EXCEPTION":"URGENT",
             "POINT_WRITE_EXCEPTION":"URGENT",
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT",
             "DATA_SOURCE_EXCEPTION":"URGENT",
-            "MONITOR_WRITE_EXCEPTION":"URGENT",
             "POINT_READ_EXCEPTION":"URGENT"
          },
          "updatePeriodType":"MILLISECONDS",
@@ -290,7 +281,7 @@
          "createSocketMonitorPoint":false,
          "enabled":true,
          "encapsulated":false,
-         "host":"192.168.1.63",
+         "host":"127.0.0.1",
          "maxReadBitCount":2000,
          "maxReadRegisterCount":125,
          "maxWriteRegisterCount":120,
@@ -304,9 +295,6 @@
       {
          "xid":"DS_137260",
          "type":"VIRTUAL",
-         "alarmLevels":{
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT"
-         },
          "updatePeriodType":"SECONDS",
          "enabled":true,
          "name":"Input High 1",
@@ -315,9 +303,6 @@
       {
          "xid":"DS_710815",
          "type":"VIRTUAL",
-         "alarmLevels":{
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT"
-         },
          "updatePeriodType":"SECONDS",
          "enabled":true,
          "name":"Low Input 1",
@@ -326,9 +311,6 @@
       {
          "xid":"DS_162006",
          "type":"VIRTUAL",
-         "alarmLevels":{
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT"
-         },
          "updatePeriodType":"SECONDS",
          "enabled":true,
          "name":"PLC2",
@@ -337,9 +319,6 @@
       {
          "xid":"DS_475917",
          "type":"VIRTUAL",
-         "alarmLevels":{
-            "UPDATE_EXECUTED_LONGER_UPDATE_PERIOD_EXCEPTION":"URGENT"
-         },
          "updatePeriodType":"SECONDS",
          "enabled":true,
          "name":"PLC3",
@@ -347,6 +326,252 @@
       }
    ],
    "dataPoints":[
+      {
+         "xid":"DP_521556",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"80"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_137260",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"Input High 1",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"1 High Input ",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
+      {
+         "xid":"DP_422594",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"40"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_710815",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"Low Input 1",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"1 Low Input",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
+      {
+         "xid":"DP_491596",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"10"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_162006",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"PLC2",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"2LowInput",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
+      {
+         "xid":"DP_333089",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"20"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_162006",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"PLC2",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"2HighInput",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
+      {
+         "xid":"DP_838393",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"3"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_475917",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"PLC3",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"HIGH3",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
+      {
+         "xid":"DP_723773",
+         "loggingType":"ON_CHANGE",
+         "intervalLoggingPeriodType":"MINUTES",
+         "intervalLoggingType":"INSTANT",
+         "purgeType":"YEARS",
+         "pointLocator":{
+            "dataType":"NUMERIC",
+            "changeType":{
+               "type":"NO_CHANGE",
+               "startValue":"0"
+            },
+            "settable":true
+         },
+         "eventDetectors":[
+         ],
+         "engineeringUnits":"",
+         "purgeStrategy":"PERIOD",
+         "chartColour":null,
+         "chartRenderer":null,
+         "dataSourceXid":"DS_475917",
+         "defaultCacheSize":1,
+         "description":null,
+         "deviceName":"PLC3",
+         "discardExtremeValues":false,
+         "discardHighLimit":1.7976931348623157E308,
+         "discardLowLimit":-1.7976931348623157E308,
+         "enabled":true,
+         "eventTextRenderer":{
+            "type":"EVENT_NONE"
+         },
+         "intervalLoggingPeriod":15,
+         "name":"LOW3",
+         "purgePeriod":1,
+         "purgeValuesLimit":100,
+         "textRenderer":{
+            "type":"PLAIN",
+            "suffix":""
+         },
+         "tolerance":0.0
+      },
       {
          "xid":"DP_922094",
          "loggingType":"ON_CHANGE",
@@ -521,7 +746,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -568,7 +793,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -615,7 +840,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -662,7 +887,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -756,7 +981,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -803,7 +1028,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -850,7 +1075,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -897,7 +1122,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -944,7 +1169,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -1085,7 +1310,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -1132,7 +1357,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -1179,7 +1404,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -1226,7 +1451,7 @@
          "discardExtremeValues":false,
          "discardHighLimit":1.7976931348623157E308,
          "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
+         "enabled":true,
          "eventTextRenderer":{
             "type":"EVENT_NONE"
          },
@@ -1239,257 +1464,7 @@
             "suffix":""
          },
          "tolerance":0.0
-      },
-      {
-         "xid":"DP_521556",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"80"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_137260",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"Input High 1",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"1 High Input ",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
-      },
-      {
-         "xid":"DP_422594",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"40"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_710815",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"Low Input 1",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"1 Low Input",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
-      },
-      {
-         "xid":"DP_491596",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"10"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_162006",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"PLC2",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"2LowInput",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
-      },
-      {
-         "xid":"DP_333089",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"20"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_162006",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"PLC2",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"2HighInput",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
-      },
-      {
-         "xid":"DP_838393",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"3"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_475917",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"PLC3",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"HIGH3",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
-      },
-      {
-         "xid":"DP_723773",
-         "loggingType":"ON_CHANGE",
-         "intervalLoggingPeriodType":"MINUTES",
-         "intervalLoggingType":"INSTANT",
-         "purgeType":"YEARS",
-         "pointLocator":{
-            "dataType":"NUMERIC",
-            "changeType":{
-               "type":"NO_CHANGE",
-               "startValue":"0"
-            },
-            "settable":true
-         },
-         "eventDetectors":[
-         ],
-         "engineeringUnits":"",
-         "purgeStrategy":"PERIOD",
-         "chartColour":null,
-         "chartRenderer":null,
-         "dataSourceXid":"DS_475917",
-         "defaultCacheSize":1,
-         "description":null,
-         "deviceName":"PLC3",
-         "discardExtremeValues":false,
-         "discardHighLimit":1.7976931348623157E308,
-         "discardLowLimit":-1.7976931348623157E308,
-         "enabled":false,
-         "eventTextRenderer":{
-            "type":"EVENT_NONE"
-         },
-         "intervalLoggingPeriod":15,
-         "name":"LOW3",
-         "purgePeriod":1,
-         "purgeValuesLimit":100,
-         "textRenderer":{
-            "type":"PLAIN",
-            "suffix":""
-         },
-         "tolerance":0.0
       }
-   ],
-   "scheduledEvents":[
-   ],
-   "compoundEventDetectors":[
    ],
    "pointLinks":[
       {
@@ -1663,24 +1638,20 @@
          "username":"user"
       }
    ],
-   "mailingLists":[
-   ],
-   "publishers":[
-   ],
    "pointHierarchy":[
    ],
    "eventHandlers":[
    ],
    "watchLists":[
       {
-         "xid":"WL_111026",
+         "xid":"WL_333502",
          "user":"admin",
          "dataPoints":[
             "DP_922094",
-            "DP_394876",
-            "DP_769112",
             "DP_337889",
             "DP_472965",
+            "DP_394876",
+            "DP_769112",
             "DP_172628"
          ],
          "sharingUsers":[
@@ -1712,8 +1683,6 @@
          "name":"(unnamed)"
       }
    ],
-   "maintenanceEvents":[
-   ],
    "scripts":[
       {
          "type":"CONTEXTUALIZED_SCRIPT",
@@ -1743,11 +1712,11 @@
          "user":"admin",
          "pointsOnContext":[
             {
-               "varName":"u",
-               "dataPointXid":"DP_521556"
+               "varName":"p4",
+               "dataPointXid":"DP_078771"
             },
             {
-               "varName":"l",
+               "varName":"p5",
                "dataPointXid":"DP_390868"
             }
          ],
@@ -1761,9 +1730,9 @@
                "objectId":2
             }
          ],
-         "name":"InputHigh",
-         "script":"var inputValue = u.value; \nvar low = l.value;\nif (!isNaN(inputValue)){\n    if (inputValue > low){\n        if (inputValue >= 0 && inputValue <= 100){\n            dp.writeDataPoint('DP_078771', inputValue)\n        }\n    }\n}\n",
-         "xid":"SC_747286"
+         "name":"RESTORE DEFAULT",
+         "script":"dp.writeDataPoint('DP_078771', 80)\ndp.writeDataPoint('DP_390868', 40)",
+         "xid":"SC_002678"
       },
       {
          "type":"CONTEXTUALIZED_SCRIPT",
@@ -1787,6 +1756,33 @@
          "name":"LOW1=0",
          "script":"dp.writeDataPoint('DP_390868', 0)",
          "xid":"SC_574925"
+      },
+      {
+         "type":"CONTEXTUALIZED_SCRIPT",
+         "user":"admin",
+         "pointsOnContext":[
+            {
+               "varName":"u",
+               "dataPointXid":"DP_521556"
+            },
+            {
+               "varName":"l",
+               "dataPointXid":"DP_390868"
+            }
+         ],
+         "objectsOnContext":[
+            {
+               "varName":"ds",
+               "objectId":1
+            },
+            {
+               "varName":"dp",
+               "objectId":2
+            }
+         ],
+         "name":"InputHigh",
+         "script":"var inputValue = u.value; \nvar low = l.value;\nif (!isNaN(inputValue)){\n    if (inputValue > low){\n        if (inputValue >= 0 && inputValue <= 100){\n            dp.writeDataPoint('DP_078771', inputValue)\n        }\n    }\n}\n",
+         "xid":"SC_747286"
       },
       {
          "type":"CONTEXTUALIZED_SCRIPT",
@@ -1843,25 +1839,6 @@
          "user":"admin",
          "pointsOnContext":[
             {
-               "varName":"p",
-               "dataPointXid":"DP_172628"
-            }
-         ],
-         "objectsOnContext":[
-            {
-               "varName":"dp",
-               "objectId":2
-            }
-         ],
-         "name":"ON\/OFF PUMP 3",
-         "script":"var inputValue = p.value; \ndp.writeDataPoint('DP_172628', !inputValue);",
-         "xid":"SC_224240"
-      },
-      {
-         "type":"CONTEXTUALIZED_SCRIPT",
-         "user":"admin",
-         "pointsOnContext":[
-            {
                "varName":"v",
                "dataPointXid":"DP_472965"
             }
@@ -1885,146 +1862,70 @@
          "user":"admin",
          "pointsOnContext":[
             {
-               "varName":"p4",
-               "dataPointXid":"DP_078771"
-            },
-            {
-               "varName":"p5",
-               "dataPointXid":"DP_390868"
+               "varName":"p",
+               "dataPointXid":"DP_172628"
             }
          ],
          "objectsOnContext":[
-            {
-               "varName":"ds",
-               "objectId":1
-            },
             {
                "varName":"dp",
                "objectId":2
             }
          ],
-         "name":"RESTORE DEFAULT",
-         "script":"dp.writeDataPoint('DP_078771', 80)\ndp.writeDataPoint('DP_390868', 40)",
-         "xid":"SC_002678"
-      }
-   ],
-   "pointValues":[
-      {
-         "pointXid":"DP_521556",
-         "timestamp":1772385499244,
-         "value":"80.0"
-      },
-      {
-         "pointXid":"DP_521556",
-         "timestamp":1772385498244,
-         "value":"80.0"
-      },
-      {
-         "pointXid":"DP_422594",
-         "timestamp":1772385499267,
-         "value":"40.0"
-      },
-      {
-         "pointXid":"DP_422594",
-         "timestamp":1772385498267,
-         "value":"40.0"
-      },
-      {
-         "pointXid":"DP_491596",
-         "timestamp":1772385499314,
-         "value":"10.0"
-      },
-      {
-         "pointXid":"DP_491596",
-         "timestamp":1772385498314,
-         "value":"10.0"
-      },
-      {
-         "pointXid":"DP_333089",
-         "timestamp":1772385499314,
-         "value":"20.0"
-      },
-      {
-         "pointXid":"DP_333089",
-         "timestamp":1772385498314,
-         "value":"20.0"
-      },
-      {
-         "pointXid":"DP_838393",
-         "timestamp":1772385499355,
-         "value":"3.0"
-      },
-      {
-         "pointXid":"DP_838393",
-         "timestamp":1772385498355,
-         "value":"3.0"
-      },
-      {
-         "pointXid":"DP_723773",
-         "timestamp":1772385498355,
-         "value":"0.0"
+         "name":"ON\/OFF PUMP 3",
+         "script":"var inputValue = p.value; \ndp.writeDataPoint('DP_172628', !inputValue);",
+         "xid":"SC_224240"
       }
    ],
    "systemSettings":[
       {
          "defaultLoggingType":1,
+         "filedata.path":"~\/WEB-INF\/filedata",
+         "workItemsReportingItemsPerSecondEnabled":false,
          "reportPurgePeriods":1,
          "language":"en",
+         "futureDateLimitPeriodType":3,
+         "httpClientProxyUsername":"",
          "eventPurgePeriodType":7,
          "dataPointRtValueSynchronized":"NONE",
          "threadsNameAdditionalLength":255,
+         "webResourceGraphicsPath":"static\/graphics",
          "webResourceUploadsPath":"static\/uploads",
+         "httpClientProxyPort":-1,
          "httpdsPrologue":"",
          "uiPerformance":2000,
          "eventPendingCacheEnabled":true,
          "emailSmtpHost":"",
          "plotGridlineColour":"silver",
+         "emailSmtpPassword":"",
          "httpdsEpilogue":"",
          "valuesLimitForPurge":100,
          "aggregationLimitFactor":"1.5",
          "databaseSchemaVersion":"v2.8.0",
-         "viewForceFullScreenMode":false,
-         "httpClientProxyPassword":"",
-         "purgePointValuesPeriodTypeDefault":7,
-         "purgePointValuesPeriodDefault":1,
-         "emailFromName":"Scada-LTS",
-         "httpClientProxyServer":"",
-         "httpResponseHeaders":"{\"Content-Security-Policy\": \"default-src 'self';style-src 'unsafe-inline' 'self';script-src 'unsafe-inline' 'unsafe-eval' 'self';img-src data: 'self';frame-src 'self';object-src 'none';base-uri 'self';\"}",
-         "aggregationValuesLimit":20000,
-         "emailSmtpUsername":"",
-         "dataPointExtendedNameLengthInReportsLimit":64,
-         "eventPurgePeriods":1,
-         "workItemsReportingItemsPerSecondLimit":20000,
-         "topDescription":"",
-         "filedata.path":"~\/WEB-INF\/filedata",
-         "workItemsReportingItemsPerSecondEnabled":false,
-         "futureDateLimitPeriodType":3,
-         "httpClientProxyUsername":"",
-         "webResourceGraphicsPath":"static\/graphics",
-         "httpClientProxyPort":-1,
-         "emailSmtpPassword":"",
          "hideShortcutDisableFullScreen":false,
-         "customCssContent":"#top-description-container {\n\r\t\t\t\tdisplay: flex;\n\r\t\t\t\talign-items: flex-end;\n\r\t\t\t\tjustify-content: center;\n\r} \n\r\n\r#top-description-prefix { \n\r\t\t\t\tcolor: black !important;\n\r\t\t\t\tfont-size: 2em !important;\n\r\t\t\t\tmargin-left: 0.5em !important;\n\r\t\t\t\tmargin-right: 0.5em !important;\n\r\t\t\t\tdisplay: inline-block !important;\n\r\t\t\t\tvertical-align: bottom !important;\n\r\t\t\t\tline-height: 1 !important;\n\r} \n\r\n\r#top-description {\n\r\t\t\t\tcolor: #39B54A !important;\n\r\t\t\t\tfont-size: 2em !important;\n\r\t\t\t\tdisplay: inline-block !important;\n\r\t\t\t\tline-height: 1 !important;\n\r}",
          "sms.domain":"localhost",
          "emailFromAddress":"",
          "groveLogging":false,
+         "viewForceFullScreenMode":false,
          "reportPurgePeriodType":6,
          "emailTimeout":"60000",
          "futureDateLimitPeriods":24,
          "plotBackgroundColour":"white",
+         "httpClientProxyPassword":"",
          "instanceDescription":"Click and set instance description",
          "eventPendingLimit":101,
+         "emailFromName":"Scada-LTS",
          "newVersionNotificationLevel":"S",
          "emailSmtpPort":25,
-         "eventAssignEnabled":true,
-         "topDescriptionPrefix":"",
+         "httpClientProxyServer":"",
          "chartBackgroundColour":"white",
+         "httpResponseHeaders":"{\"Content-Security-Policy\": \"default-src 'self';style-src 'unsafe-inline' 'self';script-src 'unsafe-inline' 'unsafe-eval' 'self';img-src data: 'self';frame-src 'self';object-src 'none';base-uri 'self';\"}",
          "workItemsReportingEnabled":false,
-         "aggregationEnabled":true
+         "aggregationEnabled":true,
+         "aggregationValuesLimit":20000,
+         "emailSmtpUsername":"",
+         "eventPurgePeriods":1,
+         "workItemsReportingItemsPerSecondLimit":20000
       }
-   ],
-   "usersProfiles":[
-   ],
-   "reports":[
    ]
 }

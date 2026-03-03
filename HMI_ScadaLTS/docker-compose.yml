@@ -14,7 +14,7 @@ services:
         volumes:
             -   ./docker/volumes/databases:/home/
     scadalts:
-        image: scadalts/scadalts:latest
+        image: scadalts/scadalts:release-2.8.1
         ports: 
             - "8080:8080"
         depends_on: 
